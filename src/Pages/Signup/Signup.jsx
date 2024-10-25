@@ -7,6 +7,8 @@ import * as Yup from "yup";
 function Signup() {
   const [role, setRole] = useState("");
   const navigate = useNavigate();
+
+  //handling the sign up
   const handleRegister = (values)=>{
     console.log(values);
   }
@@ -100,7 +102,7 @@ function Signup() {
       onSubmit={handleRegister}
     >
      {(formik)=>(
-      <Form className='flex flex-col gap-1 w-full h-full'>
+      <Form className='flex flex-col gap-1 w-full h-full mob2:px-12 md:px-0'>
         {/* Field for name */}
         <div className='flex flex-col h-14'>
           <Field
@@ -193,14 +195,14 @@ function Signup() {
 
          {/* Role Dropdown */}
         <div className='flex flex-col gap-1'>
-          <label className='font-semibold text-[14px]'>Role</label>
+          <label className='font-semibold text-[13px]'>Role</label>
           <select
             value={role}
             onChange={(e) => {
               setRole(e.target.value);
               formik.setFieldValue("role", e.target.value); 
             }}
-            className='border w-full focus:outline-none p-3 text-[12px] text-black rounded-lg'
+            className='border w-full focus:outline-none p-3  text-[12px] text-black rounded-lg'
           >
           <option value="">Select Role</option>
 
@@ -370,7 +372,7 @@ function Signup() {
           />      
         </div>
 
-      <div className='flex flex-col items-center gap-1 mt-1 mb-1'>
+      <div className='flex flex-col items-center gap-2  mb-1'>
           <button
             type="submit"
             className='bg-blue_green w-full text-white p-2  rounded-lg'
