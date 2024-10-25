@@ -6,10 +6,32 @@ import * as Yup from "yup";
 
 function Login() {
   const navigate = useNavigate();
-  const handleLoginSubmit =(values)=>{
-    navigate("/dashboard");
-    console.log(values);
+
+  const handleLoginSubmit =async(values)=>{
+   try{
+    const response = await fetch('/api/login',{
+      method : 'POST',
+      headers : {
+        'Content-Type' : 'application/json',
+      },
+      body : JSON.stringify({
+        user_name : values.user_name,
+        hashed_password : values.hashed_password,
+      }),
+    });
+
+    if(!response.ok){
+      throw new Error(`HTTP error! Status : ${response.status}`)
+    }
+
+    const data = await response.json();
+    alert(data.message);
+    navigate('/dashboard');
+   }catch(error){
+      console.error('Login error:' , error)
+   }
   }
+
   const validate = Yup.object({
     user_name:Yup.string()
     .required("*Required"),
