@@ -3,12 +3,33 @@ import { useNavigate } from 'react-router-dom';
 import {Formik, Form, Field, ErrorMessage} from "formik";
 import * as Yup from "yup";
 
+//API for interact with Hyper ledger
+const API_URL = "";
 
 function Signup() {
   const [role, setRole] = useState("");
   const navigate = useNavigate();
-  const handleRegister = (values)=>{
-    console.log(values);
+
+  const handleRegister = async(values)=>{
+   try{
+    const response = await fetch(API_URL , {
+      method : 'POST',
+      headers : {'Content-Type' : 'application/json'},
+      body : JSON.stringify(values),
+    });
+
+    if(response.ok){
+      const data = await response.json();
+      alert("User Registered Successfully!");
+      navigate("/");
+    }else{
+      const error = await response.json();
+      alert(`Registration failed : ${error.message}`)
+    }
+   }catch(error){
+    console.error("Error during registration : " , error);
+    alert("Registration failed,Please TRy again later.")
+   }
   }
   // const validate = Yup.object({
   //   user_name:Yup.string()
