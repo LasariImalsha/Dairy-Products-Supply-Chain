@@ -6,6 +6,8 @@ import HomeSignUp from "./Pages/Home/HomeSignUp";
 import Dashboard from "./Pages/Dashboard/Dashboard";
 import DashboardContent from "./Pages/Dashboard/DashboardContent";
 import DashboardProfile from "./Pages/Dashboard/DashboardProfile";
+import SupplierPendingorders from "./Pages/Orders/Supplier/SupplierPendingorders";
+import SupplierPastOrders from "./Pages/Orders/Supplier/SupplierPastOrders";
 
 
 function App() {
@@ -18,6 +20,8 @@ function App() {
       <Route path="/dashboard" element={<Dashboard />}>
         <Route index element={<DashboardContent />}/>
         <Route path="dashboardProfile" element={<DashboardProfile />}/>
+        <Route path="supplierPending" element={<SupplierPendingorders />}/>
+        <Route path="supplierPast" element={<SupplierPastOrders />}/>
       </Route>
     </Routes>
  </BrowserRouter>

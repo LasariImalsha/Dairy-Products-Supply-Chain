@@ -1,8 +1,8 @@
 import React from 'react';
 import Sidebar from '../Sidebar/Sidebar';
-import Header from '../../Components/Header/Header';
 import DashboardProfile from './DashboardProfile';
 import { Outlet } from 'react-router-dom';
+
 
 function Dashboard() {
   return (
