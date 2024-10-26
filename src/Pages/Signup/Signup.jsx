@@ -2,62 +2,23 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {Formik, Form, Field, ErrorMessage} from "formik";
 import * as Yup from "yup";
-
-//API for interact with Hyper ledger
-const API_URL = "";
+import { useDispatch, useSelector } from 'react-redux';
+import { signupUser } from '../../Redux/Slices/authSlice';
 
 function Signup() {
   const [role, setRole] = useState("");
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const {loading , error} = useSelector((state)=>state.auth);
 
   const handleRegister = async(values)=>{
-   try{
-    const response = await fetch(API_URL , {
-      method : 'POST',
-      headers : {'Content-Type' : 'application/json'},
-      body : JSON.stringify(values),
+    dispatch(signupUser(values)).then((res) => {
+      if (res.meta.requestStatus === 'fulfilled') {
+        navigate('/dashboard');
+      }
     });
-
-    if(response.ok){
-      const data = await response.json();
-      alert("User Registered Successfully!");
-      navigate("/");
-    }else{
-      const error = await response.json();
-      alert(`Registration failed : ${error.message}`)
-    }
-   }catch(error){
-    console.error("Error during registration : " , error);
-    alert("Registration failed,Please TRy again later.")
-   }
   }
-  // const validate = Yup.object({
-  //   user_name:Yup.string()
-  //   .required("*Required"),
-  //   first_name:Yup.string()
-  //   .required("*Required"),
-  //   contactno:Yup.string()
-  //   .required("*required"),
-  //   hashed_password:Yup.string()
-  //   .required("*Password is Required"),
-  //   address:Yup.string()
-  //   .required("*Required"),
-  //   ssn:Yup.string()
-  //   .required("*Required"),
-  //   hashed_password:Yup.string()
-  //   .required("*Required"),
-  //   confirm_password:Yup.string()
-  //   .required("*Required"),
-  //   NIC:Yup.string()
-  //   .required("*Required"),
-  //   area:Yup.string()
-  //   .required("*Required"),
-  //   email:Yup.string()
-  //   .required("*Required"),
-  //   designation:Yup.string()
-  //   .required("*Required"),
-  // })
-
+  
    // Function to get validation schema based on role
    const getValidationSchema = (role) => {
     const baseSchema = {
@@ -392,12 +353,10 @@ function Signup() {
         </div>
 
       <div className='flex flex-col items-center gap-1 mt-1 mb-1'>
-          <button
-            type="submit"
-            className='bg-blue_green w-full text-white p-2  rounded-lg'
-          >
-            SignUp
+      <button type="submit" disabled={loading} className='bg-blue_green w-full text-white p-2 rounded-lg'>
+            {loading ? 'Signing Up...' : 'Sign Up'}
           </button>
+          {error && <p className="text-red-500">{error}</p>}
           <h3 className='font-light text-gray-400 text-[12px] '>Already have an account?
             <button 
               onClick={()=>navigate("/")}

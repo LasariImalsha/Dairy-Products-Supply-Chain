@@ -2,34 +2,20 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import {Formik, Form, Field, ErrorMessage} from "formik";
 import * as Yup from "yup";
-
+import { useDispatch, useSelector } from 'react-redux';
+import { loginUser } from '../../Redux/Slices/authSlice';
 
 function Login() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { loading, error } = useSelector((state) => state.auth);
 
   const handleLoginSubmit =async(values)=>{
-   try{
-    const response = await fetch('/api/login',{
-      method : 'POST',
-      headers : {
-        'Content-Type' : 'application/json',
-      },
-      body : JSON.stringify({
-        user_name : values.user_name,
-        hashed_password : values.hashed_password,
-      }),
+    dispatch(loginUser(values)).then((res) => {
+      if (res.meta.requestStatus === 'fulfilled') {
+        navigate('/dashboard');
+      }
     });
-
-    if(!response.ok){
-      throw new Error(`HTTP error! Status : ${response.status}`)
-    }
-
-    const data = await response.json();
-    alert(data.message);
-    navigate('/dashboard');
-   }catch(error){
-      console.error('Login error:' , error)
-   }
   }
 
   const validate = Yup.object({
@@ -95,11 +81,10 @@ function Login() {
             </div>
 
             <div className='mt-8 flex flex-col items-center gap-4'>
-              <button
-                className='bg-blue_green w-full text-white p-2  rounded-lg'
-              >
-                LogIn
-              </button>
+            <button type="submit" disabled={loading} className='bg-blue_green w-full text-white p-2 rounded-lg'>
+            {loading ? 'Logging In...' : 'Login'}
+          </button>
+          {error && <p className="text-red-500">{error}</p>}
               <h3 className='font-light text-gray-400 text-[12px] '>Not Registered yet?
                 <button 
                   onClick={ ()=>navigate("/homesignup")}
